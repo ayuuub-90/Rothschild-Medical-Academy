@@ -1,14 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cover from "../../components/Cover";
-import ConditionGenerales from "../policy/ConditionGenerales";
-import { useNavigate, useParams } from "react-router";
-import { useRegisterUserMutation } from "../../redux/api/userApiSLice";
+import { useGetUserByIdQuery } from "../../redux/api/userApiSLice";
+import Loading from "../../components/Loading";
 import { toast } from "react-toastify";
+import { useUpdateUserMutation } from "../../redux/api/userApiSLice";
+import { useDispatch } from "react-redux";
+import { setCredintials } from "../../redux/features/auth/authSlice";
 
-const Authenticate = () => {
-  const [visible2, setVisible2] = useState(false);
+const Profile = () => {
+  const { data: userInfo, isLoading } = useGetUserByIdQuery();
 
-  const { email } = useParams();
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (!isLoading) {
+      setInterval(() => setLoading(false), 1000);
+    }
+  }, [isLoading]);
+
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [titre, setTitre] = useState("");
@@ -22,19 +31,31 @@ const Authenticate = () => {
   const [pays_exercice, setPays_exercice] = useState("");
   const [connu_ou, setConnu_ou] = useState("");
 
-  const navigate = useNavigate();
-  const [registerUser] = useRegisterUserMutation();
-  const handleRegister = async () => {
+  useEffect(() => {
+    if (userInfo) {
+      setEmail(userInfo.email);
+      setTitre(userInfo.titre);
+      setNom(userInfo.nom);
+      setPrenom(userInfo.prenom);
+      setProfession(userInfo.profession);
+      setSpecialite(userInfo.specialite);
+      setMode_exercice(userInfo.mode_exercice);
+      setNum_RPPS(userInfo.num_RPPS);
+      setEtablissement_exercice(userInfo.etablissement_exercice);
+      setPays_exercice(userInfo.pays_exercice);
+      setConnu_ou(userInfo.connu_ou);
+    }
+  }, [userInfo]);
+
+  const dispatch = useDispatch();
+  const [updateUser] = useUpdateUserMutation();
+  const handleUpdate = async () => {
     try {
-      if(password !== confirmPassword){
-        return toast.error("Passwords do not match");
-      }
-      await registerUser({
-        email,
-        password,
+      const res = await updateUser({
+        email: email,
         titre,
         nom,
-        prenom,
+        prenom, 
         profession,
         specialite,
         mode_exercice,
@@ -42,19 +63,30 @@ const Authenticate = () => {
         etablissement_exercice,
         pays_exercice,
         connu_ou,
+        password,
+        confirmPassword,
       }).unwrap();
-      toast.success("Registred with success");
-      navigate("/login");
+      dispatch(
+        setCredintials({ _id: res._id, nom: res.nom, prenom: res.prenom })
+      );
+      return toast.success("user updated successfully");
     } catch (error) {
       toast.error(error?.data?.message || error.message);
     }
   };
 
+  if (loading) {
+    return (
+      <>
+        <Cover /> <Loading />
+      </>
+    );
+  }
   return (
     <>
       <Cover />
-      <div className="center w-full">
-        <div className="w-1/2 py-4 form">
+      <div className="center w-full ">
+        <div className="w-1/2 py-4 form max-lg:w-full max-lg:px-4">
           <h1 className="text-3xl text-primary-color">
             Finalisez votre inscription
           </h1>
@@ -74,8 +106,14 @@ const Authenticate = () => {
             />
           </div>
 
-          <div className="flex w-full mb-2">
-            <div className="flex flex-col w-1/2">
+          <div className="border-b border-primary-orange border-dashed py-4 my-2 ">
+            <h1 className="text-primary-orange text-xl font-medium tracking-wide">
+              Changement de mot de passe
+            </h1>
+          </div>
+
+          <div className="flex w-full mb-2 max-lg:flex-col">
+            <div className="flex flex-col w-1/2 max-lg:w-full">
               <label>Votre mot de passe *</label>
               <input
                 type="password"
@@ -83,7 +121,7 @@ const Authenticate = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div className="flex flex-col w-1/2">
+            <div className="flex flex-col w-1/2 max-lg:w-full">
               <label>Confirmez votre mot de passe *</label>
               <input
                 type="password"
@@ -99,8 +137,8 @@ const Authenticate = () => {
             </h1>
           </div>
 
-          <div className="flex w-full mb-2">
-            <div className="flex flex-col w-1/5">
+          <div className="flex w-full mb-2 max-lg:flex-col">
+            <div className="flex flex-col w-1/5 max-lg:w-full">
               <label>Titre *</label>
               <select value={titre} onChange={(e) => setTitre(e.target.value)}>
                 <option value="DR">DR</option>
@@ -109,7 +147,7 @@ const Authenticate = () => {
                 <option value="Mr">Mr</option>
               </select>
             </div>
-            <div className="flex flex-col w-2/5">
+            <div className="flex flex-col w-2/5 max-lg:w-full">
               <label>Nom *</label>
               <input
                 type="text"
@@ -117,7 +155,7 @@ const Authenticate = () => {
                 onChange={(e) => setNom(e.target.value)}
               />
             </div>
-            <div className="flex flex-col w-2/5">
+            <div className="flex flex-col w-2/5 max-lg:w-full">
               <label>Prenom *</label>
               <input
                 type="text"
@@ -127,8 +165,8 @@ const Authenticate = () => {
             </div>
           </div>
 
-          <div className="flex w-full mb-2">
-            <div className="flex flex-col w-1/2">
+          <div className="flex w-full mb-2 max-lg:flex-col">
+            <div className="flex flex-col w-1/2 max-lg:w-full">
               <label>Profession *</label>
               <select
                 value={profession}
@@ -138,7 +176,7 @@ const Authenticate = () => {
                 <option value="Cherurguin">Cherurguin</option>
               </select>
             </div>
-            <div className="flex flex-col w-1/2">
+            <div className="flex flex-col w-1/2 max-lg:w-full">
               <label>Specialite *</label>
               <select
                 value={specialite}
@@ -150,8 +188,8 @@ const Authenticate = () => {
             </div>
           </div>
 
-          <div className="flex w-full mb-2">
-            <div className="flex flex-col w-1/2">
+          <div className="flex w-full mb-2 max-lg:flex-col">
+            <div className="flex flex-col w-1/2 max-lg:w-full">
               <label>Mode exercice *</label>
               <select
                 value={mode_exercice}
@@ -161,7 +199,7 @@ const Authenticate = () => {
                 <option value="Exercice liberal">Exercice liberal</option>
               </select>
             </div>
-            <div className="flex flex-col w-1/2">
+            <div className="flex flex-col w-1/2 max-lg:w-full">
               <label>Numéro RPPS *</label>
               <input
                 type="text"
@@ -171,8 +209,8 @@ const Authenticate = () => {
             </div>
           </div>
 
-          <div className="flex w-full mb-2">
-            <div className="flex flex-col w-2/3">
+          <div className="flex w-full mb-2 max-lg:flex-col">
+            <div className="flex flex-col w-2/3 max-lg:w-full">
               <label>Établissement d exercice *</label>
               <input
                 type="text"
@@ -180,13 +218,13 @@ const Authenticate = () => {
                 onChange={(e) => setEtablissement_exercice(e.target.value)}
               />
             </div>
-            <div className="flex flex-col w-1/3">
+            <div className="flex flex-col w-1/3 max-lg:w-full">
               <label>Pays d exercice *</label>
               <select
                 value={pays_exercice}
                 onChange={(e) => setPays_exercice(e.target.value)}
               >
-                <option value="maroc" selected >Maroc</option>
+                <option value="maroc">Maroc</option>
                 <option value="france">France</option>
               </select>
             </div>
@@ -215,26 +253,31 @@ const Authenticate = () => {
             </label>
           </div>
 
-          <div className="mb-2">
-            <input id="conditions" type="checkbox" />
-            <label htmlFor="conditions">
-              J’accepte les conditions générales d’utilisation de la plateforme.
-            </label>
+          <div className="border-b border-primary-orange border-dashed py-4 my-2 ">
+            <h1 className="text-primary-orange text-xl font-medium tracking-wide">
+              Préférences Cookies
+            </h1>
           </div>
 
-          <div>
-            <span
-              onClick={() => setVisible2(true)}
-              className="text-primary-color underline mx-4 cursor-pointer"
+          <p className="text-gray-500 py-3 text-lg">
+            Lorsque vous naviguez sur notre site internet, des informations sont
+            susceptibles d’être enregistrées, ou lues, dans votre terminal, sous
+            réserve de vos choix.
+          </p>
+
+          <p className="text-gray-500 py-3 text-lg">
+            Le dépôt et la lecture de cookies afin d’analyser
+            votre navigation et nous permettre de mesurer l’audience de notre
+            site internet:
+          </p>
+          
+
+          <div className="my-4">
+            <button
+              onClick={handleUpdate}
+              className="button-hover bg-primary-color text-white font-medium text-lg rounded-full px-4 py-2 "
             >
-              Conditions générales d’utilisation
-            </span>
-            <ConditionGenerales visible2={visible2} setVisible2={setVisible2} />
-          </div>
-
-          <div className="my-4" onClick={handleRegister}>
-            <button className="button-hover bg-primary-color text-white font-medium text-lg rounded-full px-4 py-2 ">
-              Activer mon compte
+              Editer mon profile
             </button>
           </div>
         </div>
@@ -243,4 +286,4 @@ const Authenticate = () => {
   );
 };
 
-export default Authenticate;
+export default Profile;

@@ -1,7 +1,7 @@
 //! first of all, connection to data base
 import connect from "./config/db_connection.js";
 
-//* dependencies imports
+// dependencies imports
 import express from "express";
 const app = express();
 
@@ -17,8 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 
 connect();
 
-//* routes imports
+// routes imports
+import userRouter from "./routes/userRoute.js";
 
+app.use("/api/users", userRouter);
 
 app.listen(process.env.PORT, () =>
   console.log("listening on port " + process.env.PORT)

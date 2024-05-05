@@ -3,6 +3,7 @@ import { asset } from "../assets/asset";
 import EventCard from "./EventCard";
 
 const EventComing = () => {
+  
   return (
     <div className="px-24 max-md:px-2 my-12">
       <div className="w_full">

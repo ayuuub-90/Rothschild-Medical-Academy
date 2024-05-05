@@ -16,7 +16,9 @@ import HomePage from "./pages/HomePage.jsx";
 import Contact from "./pages/Contact.jsx";
 import EventComingPage from "./pages/EventComingPage.jsx";
 import EventReplays from "./components/EventReplays.jsx";
-import Auth from "./pages/auth/Authenticate.jsx";
+import Authenticate from "./pages/auth/Authenticate.jsx";
+import Profile from "./pages/auth/Profile.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,7 +27,11 @@ const router = createBrowserRouter(
       <Route path="/contact" element={<Contact />} />
       <Route path="/agenda" element={<EventComingPage />} />
       <Route path="/replays" element={<EventReplays />} />
-      <Route path="/auth" element={<Auth />} />
+      <Route path="/complete-registration/:email" element={<Authenticate />} />
+
+      <Route path="" element={<PrivateRoute />}>
+        <Route path="/profile" element={<Profile />} />
+      </Route>
 
       {/* default path */}
       <Route path="" index={true} element={<HomePage />} />

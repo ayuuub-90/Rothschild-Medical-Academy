@@ -1,6 +1,10 @@
 /* eslint-disable react/prop-types */
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const EventCard = ({ thumbnail, icon, title, specialist }) => {
+  const { user } = useSelector((state) => state.auth);
+
   return (
     <div className="bg-primary-gray m-2 max-w-[450px] rounded-md overflow-hidden flex flex-col justify-between">
       <img src={thumbnail} className="w-full " />
@@ -18,12 +22,28 @@ const EventCard = ({ thumbnail, icon, title, specialist }) => {
         </div>
       </div>
       <div className="flex gap-3 p-4">
-        <button className="button-hover bg-primary-color text-white font-bold text-lg rounded-full px-4 py-2 ">
-          Se connecter
-        </button>
-        <button className="bg-white font-bold text-lg rounded-full px-4 py-2 text-primary-color border border- secondary-button-hover">
+        {user ? (
+          <Link
+            to={"/event/id/replay"}
+            className="button-hover bg-primary-color text-white font-bold text-lg rounded-full px-4 py-2 "
+          >
+            Voir le replay
+          </Link>
+        ) : (
+          <Link
+            to={"/login"}
+            className="button-hover bg-primary-color text-white font-bold text-lg rounded-full px-4 py-2 "
+          >
+            Se connecter
+          </Link>
+        )}
+
+        <Link
+          to={"/event/id"}
+          className="bg-white font-bold text-lg rounded-full px-4 py-2 text-primary-color border border- secondary-button-hover"
+        >
           En savoir plus
-        </button>
+        </Link>
       </div>
     </div>
   );

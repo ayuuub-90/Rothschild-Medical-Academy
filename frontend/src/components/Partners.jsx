@@ -11,8 +11,13 @@ const Partners = () => {
         />
         <h1 className="text-5xl max-md:text-2xl font-bold">Nos partenaires</h1>
       </div>
-      <div className="center h-[300px] ">
-        <img src={asset.bayer_logo} alt="bayer_logo" className="" />
+      <div className="center h-[300px]">
+        <img
+          src={asset.bayer_logo}
+          alt="bayer_logo"
+          className=""
+          onClick={() => {window.scrollTo(0, 0)}}
+        />
       </div>
     </div>
   );
