@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { asset } from "../assets/asset";
+import { asset } from "../../assets/asset";
 import EventCard from "./EventCard";
 
 const EventComing = () => {

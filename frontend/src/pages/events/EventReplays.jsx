@@ -1,11 +1,12 @@
-import { useState } from "react";
-import { asset } from "../assets/asset";
-import Cover from "./Cover";
-import Partners from "./Partners";
+import { useEffect, useState } from "react";
+import { asset } from "../../assets/asset";
+import Cover from "../../components/Cover";
+import Partners from "../../components/Partners";
 import EventCard from "./EventCard";
 import { FaFilter } from "react-icons/fa";
 import { GoTriangleRight, GoTriangleDown } from "react-icons/go";
 import { IoMdClose } from "react-icons/io";
+import Loading from "../../components/Loading";
 
 const EventReplays = () => {
   const [isCategoryOpen, setIsCategoryOpen] = useState(true);
@@ -16,6 +17,19 @@ const EventReplays = () => {
     if (e.target.id === "sideBarFilter") {
       setIsFilterOpen(false);
     }
+  }
+
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setInterval(() => setLoading(false), 1000);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-[80vh] ">
+        <Loading />
+      </div>
+    );
   }
 
   return (

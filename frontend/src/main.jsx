@@ -15,10 +15,12 @@ import store from "./redux/store.js";
 import HomePage from "./pages/HomePage.jsx";
 import Contact from "./pages/Contact.jsx";
 import EventComingPage from "./pages/EventComingPage.jsx";
-import EventReplays from "./components/EventReplays.jsx";
+import EventReplays from "./pages/events/EventReplays.jsx";
 import Authenticate from "./pages/auth/Authenticate.jsx";
 import Profile from "./pages/auth/Profile.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
+import EventDetails from "./pages/events/EventDetails.jsx"
+import Event from "./pages/events/Event.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,6 +33,8 @@ const router = createBrowserRouter(
 
       <Route path="" element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
+        <Route path="/event/id" element={<EventDetails />} />
+        <Route path="/event/id/replay" element={<Event />} />
       </Route>
 
       {/* default path */}

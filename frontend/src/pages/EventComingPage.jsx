@@ -1,9 +1,24 @@
 import { asset } from "../assets/asset";
-import EventCard from "../components/EventCard";
+import EventCard from "../pages/events/EventCard";
 import Partners from "../components/Partners";
 import Cover from "../components/Cover";
+import { useEffect, useState } from "react";
+import Loading from "../components/Loading";
 
 const EventComingPage = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setInterval(() => setLoading(false), 1000);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="h-[80vh] ">
+        <Loading />
+      </div>
+    );
+  }
   return (
     <>
       <Cover />

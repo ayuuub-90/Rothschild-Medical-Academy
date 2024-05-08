@@ -114,33 +114,43 @@ const updateUser = asyncHandler(async (req, res) => {
       pays_exercice,
       connu_ou,
       password,
-      confirmPassword
+      confirmPassword,
     } = req.body;
 
     const user = await User.findById(req.user._id);
     if (!user)
       return res.status(404).json({ message: "User not found, Please login" });
 
-    if(password !== "" && confirmPassword !== ""){
-      if(confirmPassword === password){
+    if (password !== "" && confirmPassword !== "") {
+      if (confirmPassword === password) {
         const new_password = await bcrypt.hash(password, 10);
         user.password = new_password;
-      }
-      else return res.status(404).json({ message: "Password aren't match" });
+      } else return res.status(404).json({ message: "Password aren't match" });
     }
-    
-    switch(true){
-      case !email: return res.json({message: "email is required"});
-      case !titre: return res.json({message: "titre is required"});
-      case !nom: return res.json({message: "nom is required"});
-      case !prenom: return res.json({message: "prenom is required"});
-      case !profession: return res.json({message: "profession is required"});
-      case !specialite: return res.json({message: "specialite is required"});
-      case !mode_exercice: return res.json({message: "mode_exercice is required"});
-      case !num_RPPS: return res.json({message: "num_RPPS is required"});
-      case !etablissement_exercice: return res.json({message: "etablissement_exercice is required"});
-      case !pays_exercice: return res.json({message: "pays_exercice is required"});
-      case !connu_ou: return res.json({message: "connu_ou is required"});
+
+    switch (true) {
+      case !email:
+        return res.json({ message: "email is required" });
+      case !titre:
+        return res.json({ message: "titre is required" });
+      case !nom:
+        return res.json({ message: "nom is required" });
+      case !prenom:
+        return res.json({ message: "prenom is required" });
+      case !profession:
+        return res.json({ message: "profession is required" });
+      case !specialite:
+        return res.json({ message: "specialite is required" });
+      case !mode_exercice:
+        return res.json({ message: "mode_exercice is required" });
+      case !num_RPPS:
+        return res.json({ message: "num_RPPS is required" });
+      case !etablissement_exercice:
+        return res.json({ message: "etablissement_exercice is required" });
+      case !pays_exercice:
+        return res.json({ message: "pays_exercice is required" });
+      case !connu_ou:
+        return res.json({ message: "connu_ou is required" });
     }
 
     user.email = email;
@@ -162,7 +172,6 @@ const updateUser = asyncHandler(async (req, res) => {
     console.log(error);
   }
 });
-
 
 //TODO ==> get a user by id
 const getUserById = asyncHandler(async (req, res) => {

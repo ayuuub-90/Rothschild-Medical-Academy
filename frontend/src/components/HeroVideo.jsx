@@ -6,13 +6,15 @@ const HeroVideo = () => {
 
         <div className="center">
           <iframe
-            className="w-[650px] h-[325px] max-xl:w-[800px] max-xl:h-[400px] max-md:w-[600px] max-md:h-[300px] max-md:m-10 max-xl:m-6 "
-            src="https://www.youtube.com/embed/E7wJTI-1dvQ"
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/7Qrh7dbyMHo?si=J5fdoWyIp8TrbmhL"
+            title="YouTube video player"
             frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            title="Embedded youtube"
-          />
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
         </div>
         <div className="w-[40%] max-xl:w-full max-xl:p-6 py-6 center ">
           <div className="flex  flex-col gap-7">

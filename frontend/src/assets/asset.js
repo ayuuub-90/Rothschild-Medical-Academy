@@ -10,7 +10,7 @@ import thumbnail_echanges_ophtalmo from "./thumbnail_echanges_ophtalmo_12.jpeg";
 import thumbnail_Pr_Perrigaut from "./thumbnail_Pr_Perrigault.png";
 import ellipse from "./ellipse_70.svg";
 import ellipseTwo from "./ellipse_72.svg";
-
+import unknown_user from "./unkown_user.svg";
 
 export const asset = {
   RMA_logo,
@@ -24,4 +24,5 @@ export const asset = {
   thumbnail_echanges_ophtalmo,
   ellipse,
   ellipseTwo,
+  unknown_user,
 };

@@ -3,6 +3,7 @@ import Cover from "../../components/Cover";
 import ConditionGenerales from "../policy/ConditionGenerales";
 import { useNavigate, useParams } from "react-router";
 import { useRegisterUserMutation } from "../../redux/api/userApiSLice";
+import { useGetAllCountriesQuery } from "../../redux/api/countryApiSlice";
 import { toast } from "react-toastify";
 
 const Authenticate = () => {
@@ -26,7 +27,7 @@ const Authenticate = () => {
   const [registerUser] = useRegisterUserMutation();
   const handleRegister = async () => {
     try {
-      if(password !== confirmPassword){
+      if (password !== confirmPassword) {
         return toast.error("Passwords do not match");
       }
       await registerUser({
@@ -49,6 +50,8 @@ const Authenticate = () => {
       toast.error(error?.data?.message || error.message);
     }
   };
+
+  const { data: countries } = useGetAllCountriesQuery();
 
   return (
     <>
@@ -186,8 +189,11 @@ const Authenticate = () => {
                 value={pays_exercice}
                 onChange={(e) => setPays_exercice(e.target.value)}
               >
-                <option value="maroc" selected >Maroc</option>
-                <option value="france">France</option>
+                {countries?.map((country) => (
+                  <option key={country._id} value={country.name}>
+                    {country.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

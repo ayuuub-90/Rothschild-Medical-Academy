@@ -1,7 +1,45 @@
+import { useState } from "react";
 import { asset } from "../assets/asset";
 import Cover from "../components/Cover";
+import { useSendMessageMutation } from "../redux/api/contactApiSlice";
+import { toast } from "react-toastify";
 
 const Contact = () => {
+  const [sendMessage] = useSendMessageMutation();
+
+  const [nom, setNom] = useState();
+  const [prenom, setPrenom] = useState();
+  const [email, setEmail] = useState();
+  const [object, setObject] = useState();
+  const [message, setMessage] = useState();
+
+  const handleSendMessage = async () => {
+    const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/;
+    const isValidEmail = emailRegex.test(email);
+
+    if (email && !isValidEmail) return toast.error("Invalid email address");
+
+    try {
+      await sendMessage({
+        prenom: prenom,
+        nom: nom,
+        message: message,
+        object: object,
+        email: email,
+      }).unwrap();
+      toast.success(
+        "Nous avons bien recu votre message, et nous avons le traiter plus tot"
+      );
+      setNom("");
+      setPrenom("");
+      setEmail("");
+      setObject("");
+      setMessage("");
+    } catch (error) {
+      toast.error(error?.data?.message || error.message);
+    }
+  };
+
   return (
     <div>
       <Cover />
@@ -22,21 +60,42 @@ const Contact = () => {
             <div className="bg-secondary-blue h-[700px] max-sm:h-[600px] rounded-md flex flex-col justify-between gap-2 p-6 input max-sm:p-2">
               <div className="flex flex-col gap-1">
                 <label>Prenom</label>
-                <input type="text" />
+                <input
+                  type="text"
+                  value={prenom}
+                  onChange={(e) => setPrenom(e.target.value)}
+                />
                 <label>Nom</label>
-                <input type="text" />
+                <input
+                  type="text"
+                  value={nom}
+                  onChange={(e) => setNom(e.target.value)}
+                />
                 <label>Email</label>
-                <input type="text" />
+                <input
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
                 <label>Object</label>
-                <input type="text" />
+                <input
+                  type="text"
+                  value={object}
+                  onChange={(e) => setObject(e.target.value)}
+                />
                 <label>Message</label>
                 <textarea
                   className="rounded-xl resize-none outline-none p-2"
                   rows={6}
                   type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                 />
               </div>
-              <button className="bg-primary-color center font-medium text-lg text-white py-3 px-3 rounded-lg button-hover mt-10">
+              <button
+                onClick={handleSendMessage}
+                className="bg-primary-color center font-medium text-lg text-white py-3 px-3 rounded-lg button-hover mt-10"
+              >
                 Envoyer
               </button>
             </div>

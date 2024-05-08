@@ -11,6 +11,7 @@ export default {
         "secondary-blue": "var(--secondary-blue)",
         "primary-orange": "var(--primary-orange)",
         "secondary-orange": "var(--secondary-orange)",
+        "thirt-orange": "var(--thirt-orange)",
         "primary-gray": "var(--primary-gray)",
       }
     },

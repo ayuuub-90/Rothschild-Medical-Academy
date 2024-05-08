@@ -8,6 +8,7 @@ const app = express();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import path from "path";
 
 dotenv.config();
 app.use(express.json());
@@ -19,8 +20,21 @@ connect();
 
 // routes imports
 import userRouter from "./routes/userRoute.js";
+import contactRouter from "./routes/contactRoute.js";
+import countryRouter from "./routes/countryRoute.js";
+import tagRouter from "./routes/tagRoute.js";
+import poisRouter from "./routes/personOfInterestsRoute.js";
+import eventRouter from "./routes/eventRoute.js";
 
 app.use("/api/users", userRouter);
+app.use("/api/contacts", contactRouter);
+app.use("/api/countries", countryRouter);
+app.use("/api/tags", tagRouter);
+app.use("/api/person-of-interest", poisRouter);
+app.use('/api/events', eventRouter);
+
+const _dirname = path.resolve();
+app.use("/uploads", express.static(_dirname + "/images"));
 
 app.listen(process.env.PORT, () =>
   console.log("listening on port " + process.env.PORT)
