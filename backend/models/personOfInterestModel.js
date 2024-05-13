@@ -5,7 +5,7 @@ const personOfInterestSchema = new mongoose.Schema({
   lastname: { type: String, required: true },
   civility: { type: String, required: true }, // Dr, Pr, Mme, Mr...
   email: { type: String, required: true }, 
-  image: { type: String },
+  image: { type: String, default: "/uploads/personOfInterests/unkown_user.svg" },
 });
 
 const PersonOfInterest = mongoose.model(

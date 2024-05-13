@@ -19,8 +19,10 @@ import EventReplays from "./pages/events/EventReplays.jsx";
 import Authenticate from "./pages/auth/Authenticate.jsx";
 import Profile from "./pages/auth/Profile.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
-import EventDetails from "./pages/events/EventDetails.jsx"
+import EventDetails from "./pages/events/EventDetails.jsx";
 import Event from "./pages/events/Event.jsx";
+import Error404 from "./pages/Error404.jsx";
+import Test from "./pages/Test.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -31,14 +33,17 @@ const router = createBrowserRouter(
       <Route path="/replays" element={<EventReplays />} />
       <Route path="/complete-registration/:email" element={<Authenticate />} />
 
+      <Route path="/test" element={<Test />} />
+
       <Route path="" element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
-        <Route path="/event/id" element={<EventDetails />} />
-        <Route path="/event/id/replay" element={<Event />} />
+        <Route path="/event/:id" element={<EventDetails />} />
+        <Route path="/event/:id/replay" element={<Event />} />
       </Route>
 
       {/* default path */}
       <Route path="" index={true} element={<HomePage />} />
+      <Route path="*" element={<Error404 />} />
     </Route>
   )
 );

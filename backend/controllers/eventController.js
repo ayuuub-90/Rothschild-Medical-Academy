@@ -17,8 +17,6 @@ const createEvent = asyncHandler(async (req, res) => {
         case !thumbnail: return res.status(404).json({message: "thumbnail is required"});
         case !personOfInterests: return res.status(404).json({message: "personOfInterests is required"});
         case !title: return res.status(404).json({message: "title is required"});
-        case !description: return res.status(404).json({message: "description is required"});
-        case !subTitle: return res.status(404).json({message: "subTitle is required"});
         case !startDate: return res.status(404).json({message: "startDate is required"});
         case !stopDate: return res.status(404).json({message: "stopDate is required"});
         case !tag: return res.status(404).json({message: "tag is required"});
@@ -61,10 +59,52 @@ const getAllEvents = asyncHandler(async (req, res) => {
   }
 });
 
+//TODO ==> get all events function
+const getThreeEvents = asyncHandler(async (req, res) => {
+  try {
+    const events = await Event.find({})
+      .populate('tag').populate("personOfInterests").limit(3);
+    return res.json(events);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.log(error);
+  }
+});
+
+//TODO ==> get all events function
+const getAllEventsComing = asyncHandler(async (req, res) => {
+  try {
+    const events = await Event.find({startDate: { $gt: new Date() }})
+      .populate('tag').populate("personOfInterests");
+    return res.json(events);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.log(error);
+  }
+});
+
+//TODO ==> get all events function
+const getEventsFiltered = asyncHandler(async (req, res) => {
+  try {
+    const { checkedTags, checkedPois } = req.body;
+
+    let args = {};
+    if( checkedTags?.length > 0 ) args.tag = {$in: checkedTags};
+    if( checkedPois?.length > 0 ) args.personOfInterests = {$in: checkedPois};
+
+    const events = await Event.find(args).populate('tag').populate('personOfInterests');
+
+    return res.json(events);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.log(error);
+  }
+});
+
 //TODO ==> get event by id function
 const getEventById = asyncHandler(async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id);
+    const event = await Event.findOne({id: req.params.id}).populate('tag').populate("personOfInterests");
     if (!event) return res.status(404).json({ message: "No event found" });
 
     return res.status(200).json(event);
@@ -74,4 +114,4 @@ const getEventById = asyncHandler(async (req, res) => {
   }
 });
 
-export { createEvent, getAllEvents, getEventById };
+export { createEvent, getAllEvents, getEventById, getAllEventsComing, getThreeEvents, getEventsFiltered };

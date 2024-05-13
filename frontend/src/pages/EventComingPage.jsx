@@ -4,8 +4,10 @@ import Partners from "../components/Partners";
 import Cover from "../components/Cover";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
+import { useGetAllEventsComingQuery } from "../redux/api/eventApiSlice.js";
 
 const EventComingPage = () => {
+  const { data: events } = useGetAllEventsComingQuery();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,67 +38,13 @@ const EventComingPage = () => {
           </div>
           <div className="center border-l-[2px] max-md:border-none border-black">
             <div className="grid grid-cols-3 max-xl:grid-cols-2 max-md:grid-cols-1 pt-0 ">
-              <EventCard
-                icon={asset.icon_caduce}
-                thumbnail={asset.thumbnail_Pr_Perrigaut}
-                title={"Comprendre les enjeux de la fin de vie"}
-                specialist={"Multi-spécialité"}
-              />
-              <EventCard
-                icon={asset.icon_cerveau}
-                thumbnail={asset.thumbnail_echanges_ophtalmo}
-                title={
-                  "Stimulation médullaire et douleur chronique : quelles innovations ?"
-                }
-                specialist={"Neurochirurgie"}
-              />
-              <EventCard
-                icon={asset.icon_eye}
-                thumbnail={asset.thumbnail_echanges_neuro}
-                title={"#1 Myopie - #2 Orbite, paupières et myopie forte"}
-                specialist={"Ophtalmologie"}
-              />
-              <EventCard
-                icon={asset.icon_caduce}
-                thumbnail={asset.thumbnail_Pr_Perrigaut}
-                title={"Comprendre les enjeux de la fin de vie"}
-                specialist={"Multi-spécialité"}
-              />
-              <EventCard
-                icon={asset.icon_cerveau}
-                thumbnail={asset.thumbnail_echanges_ophtalmo}
-                title={
-                  "Stimulation médullaire et douleur chronique : quelles innovations ?"
-                }
-                specialist={"Neurochirurgie"}
-              />
-              <EventCard
-                icon={asset.icon_eye}
-                thumbnail={asset.thumbnail_echanges_neuro}
-                title={"#1 Myopie - #2 Orbite, paupières et myopie forte"}
-                specialist={"Ophtalmologie"}
-              />
-              <EventCard
-                icon={asset.icon_caduce}
-                thumbnail={asset.thumbnail_Pr_Perrigaut}
-                title={"Comprendre les enjeux de la fin de vie"}
-                specialist={"Multi-spécialité"}
-              />
-              <EventCard
-                icon={asset.icon_cerveau}
-                thumbnail={asset.thumbnail_echanges_ophtalmo}
-                title={
-                  "Stimulation médullaire et douleur chronique : quelles innovations ?"
-                }
-                specialist={"Neurochirurgie"}
-              />
-              <EventCard
-                icon={asset.icon_eye}
-                thumbnail={asset.thumbnail_echanges_neuro}
-                title={"#1 Myopie - #2 Orbite, paupières et myopie forte"}
-                specialist={"Ophtalmologie"}
-              />
+              {events?.map((event) => (
+                <EventCard key={event._id} event={event} />
+              ))}
             </div>
+            {events.length === 0 && (
+              <div className="w-full mx-8 my-4 text-gray-600">Aucun événement.</div>
+            )}
           </div>
         </div>
       </div>

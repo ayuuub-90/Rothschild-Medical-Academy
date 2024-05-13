@@ -31,10 +31,10 @@ app.use("/api/contacts", contactRouter);
 app.use("/api/countries", countryRouter);
 app.use("/api/tags", tagRouter);
 app.use("/api/person-of-interest", poisRouter);
-app.use('/api/events', eventRouter);
+app.use("/api/events", eventRouter);
 
-const _dirname = path.resolve();
-app.use("/uploads", express.static(_dirname + "/images"));
+const __dirname = path.resolve();
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 app.listen(process.env.PORT, () =>
   console.log("listening on port " + process.env.PORT)

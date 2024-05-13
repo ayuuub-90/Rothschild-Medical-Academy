@@ -18,8 +18,8 @@ const eventSchema = new mongoose.Schema(
     ],
 
     title: { type: String, required: true },
-    description: { type: String, required: true },
-    subTitle: { type: String, required: true },
+    description: { type: String },
+    subTitle: { type: String },
     startDate: { type: Date, required: true },
     stopDate: { type: Date, required: true },
 

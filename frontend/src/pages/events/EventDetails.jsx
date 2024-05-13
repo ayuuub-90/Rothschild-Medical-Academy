@@ -1,9 +1,12 @@
-import { Link } from "react-router-dom";
-import { asset } from "../../assets/asset.js";
+import { Link, useParams } from "react-router-dom";
 import Cover from "../../components/Cover.jsx";
 import Partners from "../../components/Partners.jsx";
+import { useGetEventByIdQuery } from "../../redux/api/eventApiSlice.js";
 
 const EventDetails = () => {
+  const params = useParams();
+  const { data: event } = useGetEventByIdQuery(params.id);
+
   return (
     <>
       <Cover />
@@ -11,7 +14,7 @@ const EventDetails = () => {
         <div className="h-full w-[950px]">
           <div className="flex max-md:flex-col w-full">
             <img
-              src={asset.thumbnail_echanges_neuro}
+              src={event?.thumbnail}
               alt="thumbnail"
               className="w-1/2 rounded-md max-md:w-full max-md:p-4"
             />
@@ -19,19 +22,17 @@ const EventDetails = () => {
               <p className="text-primary-color text-2xl font-mono">
                 <strong>30 janv. 2024</strong> 19:00 à 20:30
               </p>
-              <strong className="text-3xl text-gray-800">
-                #1 Myopie - #2 Orbite, paupières et myopie forte
-              </strong>
+              <strong className="text-3xl text-gray-800">{event?.title}</strong>
             </div>
           </div>
 
           <div className="flex justify-between bg-primary-gray py-8 px-4 my-16 rounded-md">
             <div className="flex gap-2 items-center text-primary-color text-xl font-medium max-sm:text-[18px]">
-              <img src={asset.icon_eye} className="size-8 max-sm:size-6" />
-              <p>Ophtalmologie</p>
+              <img src={event?.tag.icon} className="size-8 max-sm:size-6" />
+              <p>{event?.tag.title}</p>
             </div>
             <Link
-              to={"/event/id/replay"}
+              to={`/event/${event?.id}/replay`}
               className="button-hover button-hover bg-primary-color text-white font-bold text-lg rounded-full px-4 py-2 max-sm:text-sm"
             >
               Voir le replay
@@ -44,24 +45,19 @@ const EventDetails = () => {
             </p>
             <div className="center m-4">
               <div className="h-auto p-2 grid grid-cols-4 max-md:grid-cols-2 gap-10 max-sm:grid-cols-2 items-center ">
-                <div className="mb-10">
-                  <img
-                    src={asset.unknown_user}
-                    className="rounded-full border-b-8 border-secondary-blue "
-                  />
-                  <p className="text-primary-orange text-xl text-center font-medium pt-2 max-w-[170px] max-md:text-sm ">
-                    Dr Nicolas ENGRAND
-                  </p>
-                </div>
-                <div className="mb-10">
-                  <img
-                    src={asset.unknown_user}
-                    className="rounded-full border-b-8 border-secondary-blue "
-                  />
-                  <p className="text-primary-orange text-xl text-center font-medium pt-2 max-w-[170px] max-md:text-sm ">
-                    Dr Nicolas ENGRAND
-                  </p>
-                </div>
+                {event?.personOfInterests.map((person) => (
+                  <div key={person._id} className="mb-10">
+                    <img
+                      src={person.image}
+                      alt={person?.image}
+                      className="rounded-full border-b-8 border-secondary-blue "
+                    />
+                    <p className="text-primary-orange text-xl text-center font-medium pt-2 max-w-[170px] max-md:text-sm ">
+                      {person.civility} {person.lastname} <br />
+                      <span className="">{person.firstname.toUpperCase()}</span>
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
